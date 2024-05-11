@@ -4,12 +4,12 @@ import colors from 'colors';
 import connectDB from './db/db.js';
 import userRoute from './router/user-route.js'
 import {notFound, errorHandler} from './middleware/error-middleware.js'
-
+import cors from 'cors'
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 6500;
 app.use(express.json())
-
+app.use(cors())
 //Routes
 app.use("/api/v1/user", userRoute);
 
