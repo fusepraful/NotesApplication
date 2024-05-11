@@ -2,9 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { TfiWrite } from "react-icons/tfi";
 const Home = () => {
+  document.title
   return (
     <>
-      <div className='bg-gradient-to-r to-white from-slate-300 h-screen w-screen pt-16 flex'>
+      <div title='Home' className='bg-gradient-to-r to-white from-slate-300 h-screen w-screen pt-16 flex'>
         <div className='sm:w-full md:w-[65%] p-24 '>
           <h1 className='flex items-center text-5xl font-bold gap-3 text-blue-900'><TfiWrite /><span className='text-blue-600'>Notify</span></h1>
           <h2 className='mt-7 text-3xl font-semibold text-slate-800'>Save Your Ideas Easily</h2>

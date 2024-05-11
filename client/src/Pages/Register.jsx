@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { CloudinaryContext, Image } from 'cloudinary-react';
 
 const Register = () => {
+  const [profilePhoto, setProfilePhoto] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
@@ -20,13 +22,30 @@ const Register = () => {
     });
   };
 
+  const handleImageUpload = (e) => {
+    const formData = new FormData();
+    formData.append('file', e.target.files[0]);
+    formData.append('upload_preset', 'notify'); // Replace 'your_upload_preset' with your actual Cloudinary upload preset
+    setLoading(true);
+    axios.post('https://api.cloudinary.com/v1_1/prafulfuse/image/upload', formData)
+      .then(res => {
+        setProfilePhoto(res.data.secure_url);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
+      const userData = { ...user, profilePhoto };
       const response = await axios.post(
         'http://localhost:5000/api/v1/user/register',
-        user,
+        userData,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +71,7 @@ const Register = () => {
   };
 
   return (
-    <div className='flex p-12 h-screen'>
+    <div className='flex p-12 h-screen' title='Register'>
       <div className='container p-2 justify-center items-center max-w-md mx-auto xl:max-w-5xl h-full flex  bg-white rounded-lg shadow overflow-hidden'>
         <div className='relative hidden xl:block xl:w-2/3 h-full'>
           <img
@@ -73,8 +92,7 @@ const Register = () => {
             <div className='mb-4 mt-4 flex items-center justify-center space-x-6'>
               <div className='shrink-0'>
                 <input
-                  onChange={handleChange}
-                  value={user.profilePhoto}
+                  onChange={handleImageUpload}
                   type='file'
                   accept='image/*'
                   id='profilePhoto'
